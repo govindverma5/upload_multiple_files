@@ -14,7 +14,7 @@
     <h3 style="align:center">Multiple Files Listing</h3>
     <br />
     <a style="float:right" href="{{route('files.create')}}" class="btn btn-primary" data-toggle="tooltip" data-original-title="Add file">
-<i class="fas fa-plus"></i> uploaded Image
+<i class="fas fa-plus"></i> uploaded Files
 </a>
 
 
@@ -55,8 +55,13 @@ Download
 </tr>
 @endforeach
 
+
 </tbody>
+
 </table>
+<div class="d-flex justify-content-center">
+{{ $files->links() }}
+</div>
 </div>
 @forelse($files as $files)
 
@@ -64,8 +69,10 @@ Download
 <p class="text-center" style="margin-left:45% ; border:15px solid; border-width:1px; width:300px" > No Result Found
 </p>
 @endforelse
+
         </div>
       </div>
+     
     </div>
  </body>
 </html>

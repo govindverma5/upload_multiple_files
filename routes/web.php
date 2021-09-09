@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/aa', function () {
-//     return view('viewfiles');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
 
         Route::resource('/files','App\Http\Controllers\UploadFilesController');
 

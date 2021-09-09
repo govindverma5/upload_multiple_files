@@ -16,7 +16,7 @@ class UploadFilesController extends Controller
     public function index()
     {
         //
-        $files  = files::paginate('50');
+        $files = files::paginate(5);
         return view ('viewfiles',compact('files'))->with('serial_no',1);
     }
 
@@ -39,25 +39,13 @@ class UploadFilesController extends Controller
      */
     public function store(Request $request)
     {
-        $file = $request->file('file');
-        $filename = $file->getClientOriginalName();
-        $extension = $file->getClientOriginalExtension();
-        $fileName = date('His'). '-' .$filename;
-        // $filePath = $request->file('file')->move(public_path('images'), $fileName);
-        // $image = 'public/images/'.$fileName;
-        $filePath = $request->file('file')->storeAs('images', $fileName, 'public');
-        $image = 'storage/app/public/images/'.$fileName;   //storage/app/public/images
+        $image = $request->file('file');
 
-
-        // $files = files::create(['files' => $imageName]);
-        // //
-        // $image = $request->file('file');
-
-        // $imageName = time() . '.' . $image->extension();
+        $imageName =time() . rand(1111, 9999). '.' . $image->extension();
    
-        // $image->move(public_path('images'), $imageName);
+        $image->move(public_path('images'), $imageName);
    
-        $files = files::create(['files' => $image]);
+        $files = files::create(['files' => $imageName]);
         
         return response()->json(['success' => $files]);
     }
@@ -71,8 +59,10 @@ class UploadFilesController extends Controller
     public function show($id)
     {
         //
+
         $file = files::find($id);
-        return Storage::download($file->files);
+        $path=  public_path('images/'.$file->files);
+        return response()->download($path);
     }
 
     /**
@@ -109,30 +99,5 @@ class UploadFilesController extends Controller
     {
         //
         
-    }
-
-    function fetch()
-    {
-     $images = \File::allFiles(public_path('images'));
-     $output = '<div class="row">';
-     foreach($images as $image)
-     {
-      $output .= '
-      <div class="col-md-2" style="margin-bottom:16px;" align="center">
-                <img src="'.asset('images/' . $image->getFilename()).'" class="img-thumbnail" width="175" height="175" style="height:175px;" />
-                <button type="button" class="btn btn-link remove_image" id="'.$image->getFilename().'">Remove</button>
-            </div>
-      ';
-     }
-     $output .= '</div>';
-     echo $output;
-    }
-
-    function delete(Request $request)
-    {
-     if($request->get('name'))
-     {
-      \File::delete(public_path('images/' . $request->get('name')));
-     }
     }
 }
